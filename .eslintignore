@@ -1,0 +1,9 @@
+# Dependency directories
+node_modules/
+
+# d.ts files
+src/**/*.d.ts
+src/**/*.*.d.ts
+
+# config files
+*.js

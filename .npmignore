@@ -1,0 +1,12 @@
+example
+node_modules/
+.idea
+yarn-error.log
+.vscode
+.DS_Store
+coverage
+convertExcel
+convertToExcel
+__tests__
+others
+src

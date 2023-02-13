@@ -1,0 +1,36 @@
+{
+    "compileOnSave": false,
+    "compilerOptions": {
+        "target": "esnext",
+        "module": "esnext",
+        "moduleResolution": "node",
+        "importHelpers": true,
+        "esModuleInterop": true,
+        "sourceMap": true,
+        "baseUrl": ".",
+        "noImplicitThis": false,
+        "noImplicitAny": false,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "charset": "utf8",
+        "allowJs": true,
+        "allowSyntheticDefaultImports": true,
+        "allowUnreachableCode": false,
+        "allowUnusedLabels": false,
+        "removeComments": false,
+        "preserveConstEnums": true,
+        "skipLibCheck": true,
+        "skipDefaultLibCheck": true,
+        "resolveJsonModule": true,
+        "typeRoots": [
+            "./node_modules/@types/",
+            "./src/@types/"
+        ],
+        "jsx": "react"
+    },
+    "include": [
+        "src/**/*",
+        "config/**/*",
+        "typings.d.ts"
+    ]
+}
