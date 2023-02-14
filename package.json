@@ -1,6 +1,6 @@
 {
     "name": "@eventtracing/web",
-    "version": "0.0.0",
+    "version": "0.0.2",
     "description": "曙光前端通用SDK",
     "main": "lib/index.js",
     "module": "es/index.js",
@@ -35,7 +35,7 @@
     },
     "license": "MIT",
     "author": "zhangtengfei",
-    "husky-deleteme": {
+    "husky-del": {
         "hooks": {
             "pre-commit": "lint-staged",
             "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
