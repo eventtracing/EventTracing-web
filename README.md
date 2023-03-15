@@ -7,7 +7,8 @@
 请查看 [曙光主页](https://eventtracing.github.io)
 
 ## 本地启动项目
-### 启动 SDK 项目
+
+### SDK 构建
 
 在根目录下执行 `yarn install` 或 `npm install`，执行成功后继续执行 `yarn start` 或 `npm run start`。
 
