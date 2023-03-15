@@ -1,40 +1,65 @@
 import { useState, useMemo, useEffect, useCallback } from 'react';
 import EventEmitter from 'eventemitter3';
-import EventTracing from '@sdk';
+import EventTracing from '@eventtracing/web';
 import styles from './index.less';
 
 const ee = new EventEmitter();
+const isInApp = false; // 是否在客户端内，这里只是个例子，具体根据自己客户端对应方法使用
 
 const Index = () => {
     const [visible, setVisible] = useState(false);
 
     useEffect(() => {
         EventTracing.init({
-            globalParams: { __test_global_param: 'test' }, // 全局公参
+            globalParams: { __test_global_param: 'test' }, // 全局公参，这里只是个例子，具体根据自己需要传参
             // isUseHeartbeat: true, // 心跳 _pd
             onPageShow: (exposeStart: any) => {
+                // 模拟客户端进入到前台事件，这里只是个例子，具体根据自己客户端对应方法使用
                 ee.on('onPageShow', () => {
                     exposeStart();
                 });
             },
             onPageHide: (exposeEnd: any) => {
+                // 模拟客户端退出到后台事件，这里只是个例子，具体根据自己客户端对应方法使用
                 ee.on('onPageHide', () => {
                     exposeEnd();
                 });
             },
             reportLogs: ({ logs }: any) => {
-                console.log(`[曙光日志上报]:`, logs);
-                window.bridge.call('eventTracing', 'reportBatch', { logs: currentLogs }, function (error: any, result: any, context: any) {
-                    console.log('Call eventTracing reportBatch', error, result, context);
-                });
+                if (isInApp) {
+                    console.log(`[曙光日志上报]:`, '客户端协议', logs);
+
+                    // 客户端日志上报方式，这里只是个简单的例子，具体根据自己客户端对应方法使用
+                    try {
+                        window.bridge.call('eventTracing', 'reportBatch', { logs }, function (error: any, result: any, context: any) {
+                            console.log('Call eventTracing reportBatch', error, result, context);
+                        });
+                    } catch (error) {
+                        console.error(`[曙光]:`, '客户端协议出错，请检查是否在客户端内、客户端是否已接入曙光 SDK', error);
+                    }
+                } else {
+                    console.log(`[曙光日志上报]:`, '网络请求', logs);
+
+                    // 浏览器端日志上报方式，通过发送网络请求上报
+                    // fetch...
+                }
             },
         });
     }, []);
 
     const getRefers = useCallback(() => {
-        window.bridge.call('eventTracing', 'refers', { key: 'all' }, function (error: any, result: any, context: any) {
-            console.log('Call eventTracing refers', error, result, context);
-        });
+        if (isInApp) {
+            try {
+                // 客户端 refers 获取方式，这里只是个简单的例子，具体根据自己客户端对应方法使用
+                window.bridge.call('eventTracing', 'refers', { key: 'all' }, function (error: any, result: any, context: any) {
+                    console.log('Call eventTracing refers', error, result, context);
+                });
+            } catch (error) {
+                console.error(`[曙光]:`, '客户端协议出错，请检查是否在客户端内、客户端是否已接入曙光 SDK', error);
+            }
+        } else {
+            console.warn(`[曙光]:`, '当前不在客户端内或客户端没有接入曙光 SDK');
+        }
     }, []);
 
     const modalMemo = useMemo(() => {
@@ -86,17 +111,24 @@ const Index = () => {
                 <div
                     className={styles.button}
                     onClick={() => {
-                        window.bridge.isBridgeAvaiable('eventTracing', 'refers', (avaiable: any, content: any) => {
-                            console.log('JS checkout bridge avaiable', avaiable, content);
-                        });
-
-                        window.bridge.isBridgeAvaiable('eventTracing', 'report', (avaiable: any, content: any) => {
-                            console.log('JS checkout bridge avaiable', avaiable, content);
-                        });
-
-                        window.bridge.isBridgeAvaiable('eventTracing', 'reportBatch', (avaiable: any, content: any) => {
-                            console.log('JS checkout bridge avaiable', avaiable, content);
-                        });
+                        if (isInApp) {
+                            try {
+                                // 客户端相关协议有效性判断方式，这里只是个简单的例子，具体根据自己客户端对应方法使用
+                                window.bridge.isBridgeAvaiable('eventTracing', 'refers', (avaiable: any, content: any) => {
+                                    console.log('JS checkout bridge avaiable', avaiable, content);
+                                });
+                                window.bridge.isBridgeAvaiable('eventTracing', 'report', (avaiable: any, content: any) => {
+                                    console.log('JS checkout bridge avaiable', avaiable, content);
+                                });
+                                window.bridge.isBridgeAvaiable('eventTracing', 'reportBatch', (avaiable: any, content: any) => {
+                                    console.log('JS checkout bridge avaiable', avaiable, content);
+                                });
+                            } catch (error) {
+                                console.error(`[曙光]:`, '客户端协议出错，请检查是否在客户端内、客户端是否已接入曙光 SDK', error);
+                            }
+                        } else {
+                            console.warn(`[曙光]:`, '当前不在客户端内或客户端没有接入曙光 SDK');
+                        }
                     }}
                 >Check Avaiable</div>
 
